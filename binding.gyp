@@ -22,9 +22,9 @@
       "cflags": [
         "-DENABLE_GDB_JIT_INTERFACE",
         "-Wall",
-        "-I/opt/vc/include",
-        "-I/opt/vc/include/interface/vcos/pthreads",
-        "-I/opt/vc/include/interface/vmcs_host/linux"
+	"-I/home/kevin/PMW/pi/rpi-buildroot-pmw/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include",
+	"-I/home/kevin/PMW/pi/rpi-buildroot-pmw/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/interface/vcos/pthreads",
+	"-I/home/kevin/PMW/pi/rpi-buildroot-pmw/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/interface/vmcs_host/linux"
       ],
     },
     {
@@ -33,15 +33,15 @@
         "src/init-egl.cc"
       ],
       "ldflags": [
-        "-L/opt/vc/lib",
+        "-L/home/kevin/PMW/pi/rpi-buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/",
         "-lGLESv2"
       ],
       "cflags": [
         "-DENABLE_GDB_JIT_INTERFACE",
         "-Wall",
-        "-I/opt/vc/include",
-        "-I/opt/vc/include/interface/vcos/pthreads",
-        "-I/opt/vc/include/interface/vmcs_host/linux"
+        "-I/home/kevin/PMW/pi/rpi-buildroot-pmw/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include",
+        "-I/home/kevin/PMW/pi/rpi-buildroot-pmw/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/interface/vcos/pthreads",
+        "-I/home/kevin/PMW/pi/rpi-buildroot-pmw/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/interface/vmcs_host/linux"
       ],
     },
   ]

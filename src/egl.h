@@ -13,8 +13,10 @@ namespace egl {
 
 struct state_t {
   EGLDisplay display;
-  EGLContext context;
-  EGLSurface surface;
+  EGLContext context_VG;
+  EGLContext context_ES;  
+  EGLSurface surface_VG;
+  EGLSurface surface_ES;
 
   uint32_t screen_width;
   uint32_t screen_height;
@@ -22,6 +24,9 @@ struct state_t {
 
 extern state_t State;
 extern EGLConfig Config;
+
+extern float p[4][2];
+extern int mire;
 
 extern void InitBindings(Handle<Object> target);
 

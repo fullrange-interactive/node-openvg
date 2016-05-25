@@ -167,6 +167,14 @@ V8_METHOD_DECL(TransformClipLineNDS);
 
 }
 
+namespace mapping {
+
+V8_METHOD_DECL(GetValue);
+V8_METHOD_DECL(SetValue);
+V8_METHOD_DECL(SetMire);
+
+
+}
 }
 
 #endif

@@ -11,7 +11,7 @@
 #include "openvg.h"
 #include "egl.h"
 #include "argchecks.h"
-
+// 
 #include "v8_helpers.h"
 
 const bool kInitOpenGLES = false;
@@ -185,7 +185,19 @@ void init(Handle<Object> target) {
                        openvg::ext::ProjectiveMatrixNDS);
   NODE_SET_METHOD(ext, "transformClipLineNDS",
                        openvg::ext::TransformClipLineNDS);
-
+  
+  /* Mapping */
+  Local<Object> mapping = Object::New();
+  target->Set(String::New("mapping"), mapping);
+  
+  NODE_SET_METHOD(mapping, "SetValue",
+                       openvg::mapping::SetValue);
+  NODE_SET_METHOD(mapping, "GetValue",
+                       openvg::mapping::GetValue);
+  NODE_SET_METHOD(mapping, "SetMire",
+                       openvg::mapping::SetMire);
+  
+  
   /* EGL */
   Local<Object> egl = Object::New();
   target->Set(String::New("egl"), egl);
@@ -198,7 +210,7 @@ NODE_MODULE(openvg, init)
     if(errorCode != VG_NO_ERROR) {\
       char buffer[100];\
       snprintf(&buffer[0], sizeof(buffer), "vgGetError: 0x%04x", errorCode);\
-      __assert_fail (buffer, __FILE__, __LINE__, __PRETTY_FUNCTION__);\
+      assert(buffer);\
     }\
   }
 
@@ -249,24 +261,28 @@ V8_METHOD(openvg::StartUp) {
 
   egl::Init();
 
-  if (kInitOpenGLES) {
-    egl::InitOpenGLES();
-  }
+//   if (kInitOpenGLES) {
+//     egl::InitOpenGLES();
+//   }
 
   CHECK_VG_ERROR;
 
   Local<Object> screen = args[0].As<Object>();
-  screen->Set(String::NewSymbol("width" ),
+  screen->Set(String::NewSymbol("width"),
               Integer::New(egl::State.screen_width));
   screen->Set(String::NewSymbol("height"),
               Integer::New(egl::State.screen_height));
   screen->Set(String::NewSymbol("display"),
               External::New(egl::State.display));
-  screen->Set(String::NewSymbol("surface"),
-              External::New(egl::State.surface));
-  screen->Set(String::NewSymbol("context"),
-              External::New(egl::State.context));
-
+  screen->Set(String::NewSymbol("surface_ES"),
+              External::New(egl::State.surface_ES));
+  screen->Set(String::NewSymbol("context_ES"),
+              External::New(egl::State.context_ES));
+  screen->Set(String::NewSymbol("surface_VG"),
+              External::New(egl::State.surface_VG));
+  screen->Set(String::NewSymbol("context_VG"),
+              External::New(egl::State.context_VG));
+  
   V8_RETURN(Undefined());
 }
 
@@ -310,9 +326,37 @@ V8_METHOD(openvg::Finish) {
   V8_RETURN(Undefined());
 }
 
+/* Perspective correction */
+V8_METHOD(openvg::mapping::SetValue)
+{
+  HandleScope scope;
+
+  CheckArgs3(SetValue, x, Int32, y, Int32, value, Number);
+
+  egl::p[args[0]->Int32Value()][args[1]->Int32Value()]=args[2]->NumberValue();
+  
+  V8_RETURN(Undefined());
+}
+V8_METHOD(openvg::mapping::GetValue)
+{
+  HandleScope scope;
+
+  CheckArgs2(GetValue, x, Int32, y, Int32);
+
+  V8_RETURN(Number::New(egl::p[args[0]->Int32Value()][args[1]->Int32Value()]));
+}
+V8_METHOD(openvg::mapping::SetMire)
+{
+  HandleScope scope;
+
+  CheckArgs1(SetMire, b, Int32);
+
+  egl::mire=args[0]->Int32Value();
+  
+  V8_RETURN(Undefined());
+}
 
 /* Getters and Setters */
-
 
 V8_METHOD(openvg::SetF) {
   HandleScope scope;
